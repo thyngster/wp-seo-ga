@@ -6,23 +6,10 @@ Description: Wordpress plugin to track bot visits on Google Analytics
 Version: 0.1
 Author: David Vallejo
 Author URI: https://www.thyngster.com
-License: GPL2
+License: MIT
 */
 /*
 Copyright 2016  David Vallejo  (email : thyngster@gmail)
-
-This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License, version 2, as 
-published by the Free Software Foundation.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 require_once 'vendor/autoload.php';
@@ -61,20 +48,20 @@ if(!class_exists('WP_Plugin_Seo_Ga'))
 			        <?php
 				    if( $active_tab == 'general_options' ) {
 				            settings_fields("section");
-						
+
 					    echo "<br /><br />This plugin takes care of detecting search bot visits, and register them on Google Analytics using the measurement protocol. Got to the <a href='/wp-admin/admin.php?page=wp-seo-ga-panel&tab=about'>About tab</a> to get more info.";
 				            do_settings_sections("wp-seo-ga-options");
 				            echo "* Please use a value with the following format:<br /> <strong>/(UA|YT|MO)-\d+-\d+/</strong>";
-				            submit_button(); 
+				            submit_button();
 				    }else{
 				            do_settings_sections("wp-seo-ga-about");
 					?>
 					<div id="post-body-content">
 						WP SEO GA version 0.1
-	
+
 						<hr />
 						<br />
-						<br />This plugin uses <a href="https://github.com/ua-parser/uap-core">uap-core</a> to detect whenever a search bot visits your page, and then send the info about the bot and visited page to the configured Google Analytics Property ID.	
+						<br />This plugin uses <a href="https://github.com/ua-parser/uap-core">uap-core</a> to detect whenever a search bot visits your page, and then send the info about the bot and visited page to the configured Google Analytics Property ID.
 						<br />
 						<br />Read more about the Measurement Protocol <a href="https://developers.google.com/analytics/devguides/collection/protocol/v1/?hl=en">here</a> .
 						<br />
@@ -87,7 +74,7 @@ if(!class_exists('WP_Plugin_Seo_Ga'))
 
 &nbsp;
 					</div>
- 
+
 				       <?php
 					    echo "<p>This </p>";
 				    }
@@ -209,11 +196,11 @@ if(!class_exists('WP_Plugin_Seo_Ga'))
 		        )
 		      );
 		      $context = stream_context_create($opts);
-		      $file = file_get_contents($hitPayload, false, $context);	
+		      $file = file_get_contents($hitPayload, false, $context);
 		     }
 		}
         } // END public function __construct
-    
+
 
 
         /**
@@ -224,10 +211,10 @@ if(!class_exists('WP_Plugin_Seo_Ga'))
         {
             // Do nothing
         } // END public static function activate
-    
+
         /**
          * Deactivate the plugin
-         */     
+         */
         public static function deactivate()
         {
             // Do nothing
