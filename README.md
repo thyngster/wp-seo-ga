@@ -42,24 +42,6 @@ Custom Dimensions
 |#15                      |Server Protocol        |Hit     |
 |#16                      |Reverse Hostname       |User    |
 
-|Custom Dimension|Value|Scope|
-|:-:|:-|:-:|
-|#1|Bot Name|User|
-|#2|Bot Device|User|
-|#3|Bot Model|User|
-|#4|Original User Agent|Hit|
-|#5|Response Status|Hit|
-|#6|Cliend ID|User|
-|#7|User ID|User|
-|#8|Total Memory Used|Hit|
-|#9|Total Processing Time|Hit|
-|#10|Total Number of Queries|Hit|
-|#11|Bot Name|Hit|
-|#12|Bot Device|Hit|
-|#13|Bot Model|Hit|
-|#14|Request Method|Hit|
-|#15|Server Protocol|Hit|
-|#16|Reverse Hostname|User|
 
 # To-Do
 
@@ -93,4 +75,5 @@ This is a free to use plugin for Wordpress, and so it will continue to be. Any c
 I'm coding the plugin on my free time, if you found the plugin useful, you may want to donate some money for the project. Please use the following button:
 
 David Vallejo
+
 [@thyng](https://www.thyngster.com/thyng)
