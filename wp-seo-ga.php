@@ -121,7 +121,7 @@ if(!class_exists('WP_Plugin_Seo_Ga'))
             $core_payload_template = array (
               'v' => '1',
               't' => 'pageview',
-              'dl' => $_SERVER["REQUEST_SCHEME"].'://'.$_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"],
+              'dl' => ($_SERVER["HTTPS"] == "on" ? "https" : "http").'://'.$_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"],
               'ul' => substr($_SERVER["HTTP_ACCEPT_LANGUAGE"],0,2),
               'de' => 'UTF-8',
               'dt' => '',
@@ -144,14 +144,16 @@ if(!class_exists('WP_Plugin_Seo_Ga'))
               'cd11' => $bot_details["name"],
               'cd12' => $bot_details["model"],
               'cd13' => $bot_details["type"],
-              'cd14' => $_SERVER["REQUEST_METHOD"],
+              'cd14' => ($_SERVER["HTTPS"] == "on" ? "https" : "http"),
               'cd15' => $_SERVER["SERVER_PROTOCOL"],
               'cd16' => $bot_details["ip_reverse_domain"]
             );
+            print_r($core_payload_template);
 
             if(is_404()){
               $core_payload_template["cd5"]= '404';
             }
+            print_r($core_payload_template);
             $this->send_ga_hit($core_payload_template);
         }
 
