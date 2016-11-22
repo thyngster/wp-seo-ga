@@ -40,7 +40,10 @@ if(!class_exists('WP_Plugin_Seo_Ga'))
               add_settings_section("section", "All Settings", null, "wp-seo-ga-options");
               add_settings_section("section", "About", null, "wp-seo-ga-about");
               add_settings_field("google_analytics_property_id", "Google Analytics Profile ID", "display_google_analytics_property_element", "wp-seo-ga-options", "section");
+              add_settings_field("wp_seo_ga_endpoint", "Endpoint URL", "display_wp_seo_ga_endpoint_element", "wp-seo-ga-options", "section");
               register_setting("section", "google_analytics_property_id");
+              register_setting("section", "wp_seo_ga_endpoint");
+
           }
 
 
@@ -48,6 +51,12 @@ if(!class_exists('WP_Plugin_Seo_Ga'))
           {
               ?>
                   <input type="text" name="google_analytics_property_id" id="google_analytics_property_id" value="<?php echo get_option('google_analytics_property_id'); ?>" />
+              <?php
+          }
+          function display_wp_seo_ga_endpoint_element()
+          {
+              ?>
+                  <input type="text" size="80" name="wp_seo_ga_endpoint" id="wp_seo_ga_endpoint" value="<?php echo get_option('wp_seo_ga_endpoint'); ?>" />
               <?php
           }
           function theme_settings_page()
@@ -86,7 +95,7 @@ if(!class_exists('WP_Plugin_Seo_Ga'))
                           <br />You may find the sourcecode on the following github repo: <a href="https://github.com/thyngster/wp-seo-ga">https://github.com/thyngster/wp-seo-ga</a>
                           <br />You may read some more info and leave a comment on the following blog post: <a href="https://www.thyngster.com/seo-meets-ga-tracking-search-engines-visits-within-measurement-protocol">https://www.thyngster.com/seo-meets-ga-tracking-search-engines-visits-within-measurement-protocol</a>
                           <br />
-                          <br /><a href="https://www.twitter.com/thyng">@thyng</a>
+                          <br />David Vallejo <a href="https://www.twitter.com/thyng">@thyng</a>
                           &nbsp;
                           </div>
                          <?php
@@ -143,6 +152,10 @@ if(!class_exists('WP_Plugin_Seo_Ga'))
             if(is_404()){
               $core_payload_template["cd5"]= '404';
             }
+      /*      echo "<pre>";
+            print_r(ini_get('allow_url_fopen'));
+            die();
+            */
             $this->send_ga_hit($core_payload_template);
         }
 
@@ -162,6 +175,7 @@ if(!class_exists('WP_Plugin_Seo_Ga'))
 
         public function get_bot_details(){
           $ua = $_SERVER['HTTP_USER_AGENT'];
+          $ua = 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)';
           $parser = Parser::create();
           $user_agent_parsed = $parser->parse($ua);
           $bot_info = array(
@@ -215,6 +229,7 @@ if(!class_exists('WP_Plugin_Seo_Ga'))
 
         public static function activate()
         {
+          update_option('wp_seo_ga_endpoint','https://www.google-analytics.com/collect');
             // Do nothing
         } // END public static function activate
 
@@ -234,8 +249,8 @@ if(!class_exists('WP_Plugin_Seo_Ga'))
 if(class_exists('WP_Plugin_Seo_Ga'))
 {
     // Installation and uninstallation hooks
-    /*register_activation_hook(__FILE__, array('WP_Plugin_Seo_Ga', 'activate'));
+    register_activation_hook(__FILE__, array('WP_Plugin_Seo_Ga', 'activate'));
     register_deactivation_hook(__FILE__, array('WP_Plugin_Seo_Ga', 'deactivate'));
-    */
+
     $wp_plugin_seo_ga = new WP_Plugin_Seo_Ga();
 }
