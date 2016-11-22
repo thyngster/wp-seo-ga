@@ -199,7 +199,6 @@ if(!class_exists('WP_Plugin_Seo_Ga'))
 
         public function get_bot_details(){
           $ua = $_SERVER['HTTP_USER_AGENT'];
-          $ua = 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)';
           $parser = Parser::create();
           $user_agent_parsed = $parser->parse($ua);
           $bot_info = array(
