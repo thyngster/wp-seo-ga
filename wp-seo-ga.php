@@ -165,26 +165,33 @@ if(!class_exists('WP_Plugin_Seo_Ga'))
                            "User-agent: SEO Meets Google Analytics Plugin WP 0.2\r\n"
             )
           );
+
           $context = stream_context_create($opts);
-          $file = preg_match("/^http/", $file) ? file_get_contents($hitPayload, false, $context) : $this->file_get_contents_curl($hitPayload);
+          if(ini_get("allow_url_fopen")==true){
+            $file = file_get_contents($hitPayload, false, $context);
+          } else {
+            $file = $this->file_get_contents_curl($hitPayload);
+          }
         }
 
         public function file_get_contents_curl($url, $opts = [])
         {
-          $ch = curl_init();
-          curl_setopt($ch, CURLOPT_TIMEOUT, 5);
-          curl_setopt($ch, CURLOPT_USERAGENT, "SEO Meets Google Analytics Plugin WP 0.2");
-          curl_setopt($ch, CURLOPT_URL, $url);
-          if(is_array($opts) && $opts) {
-            foreach($opts as $key => $val) {
-              curl_setopt($ch, $key, $val);
+          if(function_exists('curl_version')){
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+            curl_setopt($ch, CURLOPT_USERAGENT, "SEO Meets Google Analytics Plugin WP 0.2");
+            curl_setopt($ch, CURLOPT_URL, $url);
+            if(is_array($opts) && $opts) {
+              foreach($opts as $key => $val) {
+                curl_setopt($ch, $key, $val);
+              }
             }
-          }
-          curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-          if(FALSE === ($retval = curl_exec($ch))) {
-            error_log(curl_error($ch));
-          } else {
-            return $retval;
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            if(FALSE === ($retval = curl_exec($ch))) {
+              error_log(curl_error($ch));
+            } else {
+              return $retval;
+            }
           }
         }
 
