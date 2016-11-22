@@ -22,7 +22,7 @@ if(!class_exists('WP_Plugin_Seo_Ga'))
         /**
          * Construct the plugin object
          */
-        public function __construct($data)
+        public function __construct()
         {
           // Add Main action, Track when WP has been fully loaded, to know the 404 status.
           add_action( 'wp', array( $this, 'trackGoogleAnalytics' ) );
@@ -152,15 +152,11 @@ if(!class_exists('WP_Plugin_Seo_Ga'))
             if(is_404()){
               $core_payload_template["cd5"]= '404';
             }
-      /*      echo "<pre>";
-            print_r(ini_get('allow_url_fopen'));
-            die();
-            */
             $this->send_ga_hit($core_payload_template);
         }
 
         public function send_ga_hit($payload,$endpoint = "https://www.google-analytics.com/collect"){
-          $hitPayload = "https://www.google-analytics.com/collect?".http_build_query($payload, '', '&');
+          $hitPayload = get_option('wp_seo_ga_endpoint')."?".http_build_query($payload, '', '&');
           // Create a stream
           $opts = array(
             'http'=>array(
@@ -170,7 +166,26 @@ if(!class_exists('WP_Plugin_Seo_Ga'))
             )
           );
           $context = stream_context_create($opts);
-          $file = file_get_contents($hitPayload, false, $context);
+          $file = preg_match("/^http/", $file) ? file_get_contents($hitPayload, false, $context) : $this->file_get_contents_curl($hitPayload);
+        }
+
+        public function file_get_contents_curl($url, $opts = [])
+        {
+          $ch = curl_init();
+          curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+          curl_setopt($ch, CURLOPT_USERAGENT, "SEO Meets Google Analytics Plugin WP 0.2");
+          curl_setopt($ch, CURLOPT_URL, $url);
+          if(is_array($opts) && $opts) {
+            foreach($opts as $key => $val) {
+              curl_setopt($ch, $key, $val);
+            }
+          }
+          curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+          if(FALSE === ($retval = curl_exec($ch))) {
+            error_log(curl_error($ch));
+          } else {
+            return $retval;
+          }
         }
 
         public function get_bot_details(){
@@ -229,6 +244,7 @@ if(!class_exists('WP_Plugin_Seo_Ga'))
 
         public static function activate()
         {
+          // Set the GA endpoint value to default value on activations
           update_option('wp_seo_ga_endpoint','https://www.google-analytics.com/collect');
             // Do nothing
         } // END public static function activate
