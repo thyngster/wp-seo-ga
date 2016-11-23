@@ -56,7 +56,9 @@ Custom Dimensions
 # ChangeLog
 
 v0.2
-
+ - Added the Document Title (&dt) to the payload (Thanks @mattstannard for the idea)
+ - Added the possibility of setting the endpoint URL, defaults to https://www.google-analytlics.com/collect
+ - Added CURL failover in case file allow_url_fopen is disabled
  - Full code refactoring and cleaning up
  - Added Request Method Dimension
  - Added Server Protocol Dimension

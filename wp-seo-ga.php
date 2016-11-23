@@ -124,7 +124,7 @@ if(!class_exists('WP_Plugin_Seo_Ga'))
               'dl' => ($_SERVER["HTTPS"] == "on" ? "https" : "http").'://'.$_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"],
               'ul' => substr($_SERVER["HTTP_ACCEPT_LANGUAGE"],0,2),
               'de' => 'UTF-8',
-              'dt' => '',
+              'dt' => get_the_title(),
               'cid' => $bot_details["ga_client_id"],
               'uid' => $bot_details["ga_user_id"],
               'tid' => get_option("google_analytics_property_id"),
@@ -148,29 +148,26 @@ if(!class_exists('WP_Plugin_Seo_Ga'))
               'cd15' => $_SERVER["SERVER_PROTOCOL"],
               'cd16' => $bot_details["ip_reverse_domain"]
             );
-            print_r($core_payload_template);
 
             if(is_404()){
               $core_payload_template["cd5"]= '404';
             }
-            print_r($core_payload_template);
             $this->send_ga_hit($core_payload_template);
         }
 
-        public function send_ga_hit($payload,$endpoint = "https://www.google-analytics.com/collect"){
+        public function send_ga_hit($payload){
           $hitPayload = get_option('wp_seo_ga_endpoint')."?".http_build_query($payload, '', '&');
-          // Create a stream
-          $opts = array(
-            'http'=>array(
-                 'method'=>"GET",
-              'header'=>"Accept-language: en\r\n" .
-                           "User-agent: SEO Meets Google Analytics Plugin WP 0.2\r\n"
-            )
-          );
 
-          $context = stream_context_create($opts);
           if(ini_get("allow_url_fopen")==true){
-            $file = file_get_contents($hitPayload, false, $context);
+            // Create a stream
+            $opts = array(
+              'http'=>array(
+                   'method'=>"GET",
+                'header'=>"Accept-language: en\r\n" .
+                             "User-agent: SEO Meets Google Analytics Plugin WP 0.2\r\n"
+              )
+            );
+            $context = stream_context_create($opts);            $file = file_get_contents($hitPayload, false, $context);
           } else {
             $file = $this->file_get_contents_curl($hitPayload);
           }
@@ -254,7 +251,6 @@ if(!class_exists('WP_Plugin_Seo_Ga'))
         {
           // Set the GA endpoint value to default value on activations
           update_option('wp_seo_ga_endpoint','https://www.google-analytics.com/collect');
-            // Do nothing
         } // END public static function activate
 
         /**
@@ -274,7 +270,7 @@ if(class_exists('WP_Plugin_Seo_Ga'))
 {
     // Installation and uninstallation hooks
     register_activation_hook(__FILE__, array('WP_Plugin_Seo_Ga', 'activate'));
-    register_deactivation_hook(__FILE__, array('WP_Plugin_Seo_Ga', 'deactivate'));
+    //register_deactivation_hook(__FILE__, array('WP_Plugin_Seo_Ga', 'deactivate'));
 
     $wp_plugin_seo_ga = new WP_Plugin_Seo_Ga();
 }
