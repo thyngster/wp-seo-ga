@@ -176,7 +176,7 @@ if(!class_exists('WP_Plugin_Seo_Ga'))
           }
         }
 
-        public function file_get_contents_curl($url, $opts = [])
+        public function file_get_contents_curl($url, $opts = array())
         {
           if(function_exists('curl_version')){
             $ch = curl_init();
