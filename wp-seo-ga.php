@@ -158,6 +158,8 @@ if(!class_exists('WP_Plugin_Seo_Ga'))
         public function send_ga_hit($payload){
           if(!get_option('wp_seo_ga_endpoint'))
               $endpoint_url = 'https://www.google-analytics.com/collect';
+          else
+              $endpoint_url = 'https://www.google-analytics.com/collect';   
           $hitPayload = $endpoint_url."?".http_build_query($payload, '', '&');
 
           if(ini_get("allow_url_fopen")==true){
